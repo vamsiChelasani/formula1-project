@@ -1,0 +1,73 @@
+{
+	"name": "cleaning_drivers_data",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_raw_drivers_data",
+						"type": "DatasetReference"
+					},
+					"name": "load"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_drivers_cleaned_data",
+						"type": "DatasetReference"
+					},
+					"name": "save"
+				}
+			],
+			"transformations": [
+				{
+					"name": "renameColumns"
+				},
+				{
+					"name": "concatNameColumn"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          driverId as integer,",
+				"          driverRef as string,",
+				"          number as integer,",
+				"          code as string,",
+				"          forename as string,",
+				"          surname as string,",
+				"          dob as string,",
+				"          nationality as string,",
+				"          url as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> load",
+				"concatNameColumn select(mapColumn(",
+				"          driver_id = driverId,",
+				"          driver_ref = driverRef,",
+				"          number,",
+				"          code,",
+				"          name,",
+				"          dob,",
+				"          nationality,",
+				"          ingestion_time",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> renameColumns",
+				"load derive(name = concat(forename,' ', surname),",
+				"          ingestion_time = currentTimestamp()) ~> concatNameColumn",
+				"renameColumns sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> save"
+			]
+		}
+	}
+}

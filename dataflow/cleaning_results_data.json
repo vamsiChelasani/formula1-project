@@ -1,0 +1,90 @@
+{
+	"name": "cleaning_results_data",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_raw_results_data",
+						"type": "DatasetReference"
+					},
+					"name": "load"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_results_cleaned_data",
+						"type": "DatasetReference"
+					},
+					"name": "save"
+				}
+			],
+			"transformations": [
+				{
+					"name": "renameColumns"
+				},
+				{
+					"name": "addTimestamp"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          resultId as integer,",
+				"          raceId as integer,",
+				"          driverId as integer,",
+				"          constructorId as integer,",
+				"          number as integer,",
+				"          grid as integer,",
+				"          position as integer,",
+				"          positionText as string,",
+				"          positionOrder as integer,",
+				"          points as double,",
+				"          laps as integer,",
+				"          time as string,",
+				"          milliseconds as integer,",
+				"          fastestLap as integer,",
+				"          rank as integer,",
+				"          fastestLapTime as string,",
+				"          fastestLapSpeed as string,",
+				"          statusId as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> load",
+				"load select(mapColumn(",
+				"          result_id = resultId,",
+				"          race_id = raceId,",
+				"          driver_id = driverId,",
+				"          constructor_id = constructorId,",
+				"          number,",
+				"          grid,",
+				"          position,",
+				"          position_text = positionText,",
+				"          position_order = positionOrder,",
+				"          points,",
+				"          laps,",
+				"          time,",
+				"          milliseconds,",
+				"          fastest_lap = fastestLap,",
+				"          rank,",
+				"          fastest_lap_time = fastestLapTime,",
+				"          fastest_lap_peed = fastestLapSpeed",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> renameColumns",
+				"renameColumns derive(ingestion_time = currentTimestamp()) ~> addTimestamp",
+				"addTimestamp sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> save"
+			]
+		}
+	}
+}

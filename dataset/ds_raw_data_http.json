@@ -1,0 +1,43 @@
+{
+	"name": "ds_raw_data_http",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "ls_http_raw_f1_data",
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"baseUrl": {
+					"value": "@dataset().baseUrl",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"relativeUrl": {
+				"type": "string"
+			},
+			"baseUrl": {
+				"type": "string"
+			}
+		},
+		"folder": {
+			"name": "ingestion"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation",
+				"relativeUrl": {
+					"value": "@dataset().relativeUrl",
+					"type": "Expression"
+				}
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

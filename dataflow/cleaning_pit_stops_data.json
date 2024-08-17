@@ -1,0 +1,69 @@
+{
+	"name": "cleaning_pit_stops_data",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_raw_pit_stops_data",
+						"type": "DatasetReference"
+					},
+					"name": "load"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_pit_stops_cleaned_data",
+						"type": "DatasetReference"
+					},
+					"name": "save"
+				}
+			],
+			"transformations": [
+				{
+					"name": "renameColumns"
+				},
+				{
+					"name": "addCurrentTimestamp"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          raceId as integer,",
+				"          driverId as integer,",
+				"          stop as integer,",
+				"          lap as integer,",
+				"          time as string,",
+				"          duration as string,",
+				"          milliseconds as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> load",
+				"load select(mapColumn(",
+				"          race_id = raceId,",
+				"          driver_id = driverId,",
+				"          stop,",
+				"          lap,",
+				"          time,",
+				"          duration,",
+				"          milliseconds",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> renameColumns",
+				"renameColumns derive(ingestion_time = currentTimestamp()) ~> addCurrentTimestamp",
+				"addCurrentTimestamp sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> save"
+			]
+		}
+	}
+}

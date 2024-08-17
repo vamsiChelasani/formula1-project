@@ -1,0 +1,9 @@
+{
+	"name": "formula1-workshop",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "516e20a3-0524-4388-80e6-7a38c3b35bba",
+		"tenantId": "afe9982b-c57a-4b78-95cb-a4284565ad97"
+	}
+}

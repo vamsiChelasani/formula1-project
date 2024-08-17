@@ -1,0 +1,64 @@
+{
+	"name": "cleaning_constructors_data",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_raw_constructors_data",
+						"type": "DatasetReference"
+					},
+					"name": "loadRawData"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "ds_constructors_cleaned_data",
+						"type": "DatasetReference"
+					},
+					"name": "save"
+				}
+			],
+			"transformations": [
+				{
+					"name": "renameColumns"
+				},
+				{
+					"name": "addCurrentTimestamp"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          constructorId as integer,",
+				"          constructorRef as string,",
+				"          name as string,",
+				"          nationality as string,",
+				"          url as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> loadRawData",
+				"loadRawData select(mapColumn(",
+				"          constructor_id = constructorId,",
+				"          constructor_ref = constructorRef,",
+				"          name,",
+				"          nationality",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> renameColumns",
+				"renameColumns derive(ingestion_time = currentTimestamp()) ~> addCurrentTimestamp",
+				"addCurrentTimestamp sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     format: 'parquet',",
+				"     truncate: true,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> save"
+			]
+		}
+	}
+}
