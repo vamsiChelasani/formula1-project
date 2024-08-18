@@ -13,13 +13,20 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "circuits.csv",
+				"fileName": {
+					"value": "@concat(utcnow(),'/circuits.csv')",
+					"type": "Expression"
+				},
 				"folderPath": "raw",
 				"fileSystem": "rawdata"
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",
 			"firstRowAsHeader": true,
+			"nullValue": {
+				"value": "'\\\\N'",
+				"type": "Expression"
+			},
 			"quoteChar": "\""
 		},
 		"schema": [
