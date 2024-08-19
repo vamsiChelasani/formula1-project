@@ -1,0 +1,39 @@
+{
+	"name": "pl_clean_formula1_data",
+	"properties": {
+		"activities": [
+			{
+				"name": "Clean circuits file",
+				"type": "DatabricksNotebook",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/formula-one-db/clean_data/clean_circuits_data",
+					"baseParameters": {
+						"file_date_parameter": {
+							"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "ls_databricks_formula_one",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"parameters": {
+			"p_window_end_date": {
+				"type": "string"
+			}
+		},
+		"annotations": []
+	}
+}
