@@ -2,12 +2,15 @@
 	"name": "tg_process_formula1_data",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
 					"referenceName": "pl_process_formula1_data",
 					"type": "PipelineReference"
+				},
+				"parameters": {
+					"p_trigger_date": "@trigger().startTime"
 				}
 			}
 		],
