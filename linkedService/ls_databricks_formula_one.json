@@ -7,14 +7,7 @@
 			"domain": "https://adb-3327119798485423.3.azuredatabricks.net",
 			"authentication": "MSI",
 			"workspaceResourceId": "/subscriptions/f75834b8-9d1d-49cb-9939-984118aaa586/resourceGroups/formula1-project_rg/providers/Microsoft.Databricks/workspaces/formula1-project-ws",
-			"newClusterNodeType": "Standard_DS3_v2",
-			"newClusterNumOfWorker": "2",
-			"newClusterSparkEnvVars": {
-				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
-			},
-			"newClusterVersion": "12.2.x-scala2.12",
-			"clusterOption": "Fixed",
-			"newClusterInitScripts": []
+			"existingClusterId": "0820-160102-3idnjhgn"
 		}
 	}
 }
