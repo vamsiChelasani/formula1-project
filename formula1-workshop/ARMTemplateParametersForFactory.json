@@ -1,0 +1,21 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "formula1-workshop"
+		},
+		"ls_datalake_accountKey": {
+			"value": ""
+		},
+		"ls_datalake_properties_typeProperties_url": {
+			"value": "https://formula1datalakeacc.dfs.core.windows.net/"
+		},
+		"ls_http_raw_f1_data_properties_typeProperties_url": {
+			"value": "@{linkedService().baseUrl}"
+		},
+		"tg_process_formula1_data_properties_typeProperties_scope": {
+			"value": "/subscriptions/f75834b8-9d1d-49cb-9939-984118aaa586/resourceGroups/formula1-project_rg/providers/Microsoft.Storage/storageAccounts/formula1datalakeacc"
+		}
+	}
+}
