@@ -6,7 +6,7 @@
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {
-			"p_window_end_date": {
+			"p_trigger_date": {
 				"type": "string"
 			}
 		},
@@ -16,7 +16,7 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": {
-					"value": "@concat('raw/',formatDateTime(dataset().p_window_end_date,'yyyy-MM-dd'))",
+					"value": "@concat('raw/',formatDateTime(dataset().p_trigger_date,'yyyy-MM-dd'))",
 					"type": "Expression"
 				},
 				"fileSystem": "rawdata"
