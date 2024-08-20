@@ -126,7 +126,7 @@
 							"type": "DatabricksNotebook",
 							"dependsOn": [
 								{
-									"activity": "process race results",
+									"activity": "process drivers standings",
 									"dependencyConditions": [
 										"Succeeded"
 									]
