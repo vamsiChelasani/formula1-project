@@ -2,7 +2,7 @@
 	"name": "tg_raw_data ingestion",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Stopped",
+		"runtimeState": "Started",
 		"pipelines": [
 			{
 				"pipelineReference": {
