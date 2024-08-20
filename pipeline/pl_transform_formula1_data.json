@@ -1,5 +1,5 @@
 {
-	"name": "pl_clean_formula1_data",
+	"name": "pl_transform_formula1_data",
 	"properties": {
 		"activities": [
 			{
@@ -56,9 +56,16 @@
 					},
 					"ifTrueActivities": [
 						{
-							"name": "Clean circuits file",
+							"name": "process race results",
 							"type": "DatabricksNotebook",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "process calculated results",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -68,7 +75,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"notebookPath": "/formula-one-db/clean_data/clean_circuits_data",
+								"notebookPath": "/formula-one-db/process_data/race_results_data",
 								"baseParameters": {
 									"file_date_parameter": {
 										"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
@@ -82,9 +89,16 @@
 							}
 						},
 						{
-							"name": "Clean races file",
+							"name": "process drivers standings",
 							"type": "DatabricksNotebook",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "process race results",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -94,7 +108,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"notebookPath": "/formula-one-db/clean_data/clean_races_data",
+								"notebookPath": "/formula-one-db/analysis/drivers_standings",
 								"baseParameters": {
 									"file_date_parameter": {
 										"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
@@ -108,9 +122,16 @@
 							}
 						},
 						{
-							"name": "Clean constructors file",
+							"name": "process constructors standings",
 							"type": "DatabricksNotebook",
-							"dependsOn": [],
+							"dependsOn": [
+								{
+									"activity": "process race results",
+									"dependencyConditions": [
+										"Succeeded"
+									]
+								}
+							],
 							"policy": {
 								"timeout": "0.12:00:00",
 								"retry": 0,
@@ -120,7 +141,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"notebookPath": "/formula-one-db/clean_data/clean_constructors_data",
+								"notebookPath": "/formula-one-db/analysis/team_standings",
 								"baseParameters": {
 									"file_date_parameter": {
 										"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
@@ -134,7 +155,7 @@
 							}
 						},
 						{
-							"name": "Clean drivers file",
+							"name": "process calculated results",
 							"type": "DatabricksNotebook",
 							"dependsOn": [],
 							"policy": {
@@ -146,111 +167,7 @@
 							},
 							"userProperties": [],
 							"typeProperties": {
-								"notebookPath": "/formula-one-db/clean_data/clean_drivers_data",
-								"baseParameters": {
-									"file_date_parameter": {
-										"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-										"type": "Expression"
-									}
-								}
-							},
-							"linkedServiceName": {
-								"referenceName": "ls_databricks_formula_one",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"name": "Clean lap_times file",
-							"type": "DatabricksNotebook",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"notebookPath": "/formula-one-db/clean_data/clean_lap_times_data",
-								"baseParameters": {
-									"file_date_parameter": {
-										"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-										"type": "Expression"
-									}
-								}
-							},
-							"linkedServiceName": {
-								"referenceName": "ls_databricks_formula_one",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"name": "Clean pit_stops file",
-							"type": "DatabricksNotebook",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"notebookPath": "/formula-one-db/clean_data/clean_pit_stops_data",
-								"baseParameters": {
-									"file_date_parameter": {
-										"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-										"type": "Expression"
-									}
-								}
-							},
-							"linkedServiceName": {
-								"referenceName": "ls_databricks_formula_one",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"name": "Clean qualifying file",
-							"type": "DatabricksNotebook",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"notebookPath": "/formula-one-db/clean_data/clean_qualifying_data",
-								"baseParameters": {
-									"file_date_parameter": {
-										"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-										"type": "Expression"
-									}
-								}
-							},
-							"linkedServiceName": {
-								"referenceName": "ls_databricks_formula_one",
-								"type": "LinkedServiceReference"
-							}
-						},
-						{
-							"name": "Clean results file",
-							"type": "DatabricksNotebook",
-							"dependsOn": [],
-							"policy": {
-								"timeout": "0.12:00:00",
-								"retry": 0,
-								"retryIntervalInSeconds": 30,
-								"secureOutput": false,
-								"secureInput": false
-							},
-							"userProperties": [],
-							"typeProperties": {
-								"notebookPath": "/formula-one-db/clean_data/clean_results_data",
+								"notebookPath": "/formula-one-db/process_data/calculated_results",
 								"baseParameters": {
 									"file_date_parameter": {
 										"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
