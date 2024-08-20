@@ -20,7 +20,7 @@
 						"type": "DatasetReference",
 						"parameters": {
 							"p_window_end_date": {
-								"value": "@pipeline().parameters.p_window_end_date",
+								"value": "@pipeline().parameters.p_trigger_date",
 								"type": "Expression"
 							}
 						}
@@ -30,6 +30,7 @@
 					],
 					"storeSettings": {
 						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
 						"enablePartitionDiscovery": false
 					},
 					"formatSettings": {
@@ -268,7 +269,7 @@
 			}
 		],
 		"parameters": {
-			"p_window_end_date": {
+			"p_trigger_date": {
 				"type": "string"
 			}
 		},

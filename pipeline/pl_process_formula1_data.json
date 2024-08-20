@@ -15,7 +15,13 @@
 						"referenceName": "pl_clean_formula1_data",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_trigger_date": {
+							"value": "@pipeline().parameters.p_trigger_date",
+							"type": "Expression"
+						}
+					}
 				}
 			},
 			{
@@ -38,10 +44,22 @@
 						"referenceName": "pl_transform_formula1_data",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"p_trigger_date": {
+							"value": "@pipeline().parameters.p_trigger_date",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
+		"concurrency": 1,
+		"parameters": {
+			"p_trigger_date": {
+				"type": "string"
+			}
+		},
 		"annotations": []
 	}
 }
