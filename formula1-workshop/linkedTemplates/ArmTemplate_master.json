@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().baseUrl}"
 		},
+		"tg_process_formula1_data_properties_pl_process_formula1_data_parameters_p_trigger_date": {
+			"type": "string",
+			"defaultValue": "@trigger().startTime"
+		},
 		"tg_process_formula1_data_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/f75834b8-9d1d-49cb-9939-984118aaa586/resourceGroups/formula1-project_rg/providers/Microsoft.Storage/storageAccounts/formula1datalakeacc"
@@ -58,6 +62,9 @@
 					},
 					"ls_http_raw_f1_data_properties_typeProperties_url": {
 						"value": "[parameters('ls_http_raw_f1_data_properties_typeProperties_url')]"
+					},
+					"tg_process_formula1_data_properties_pl_process_formula1_data_parameters_p_trigger_date": {
+						"value": "[parameters('tg_process_formula1_data_properties_pl_process_formula1_data_parameters_p_trigger_date')]"
 					},
 					"tg_process_formula1_data_properties_typeProperties_scope": {
 						"value": "[parameters('tg_process_formula1_data_properties_typeProperties_scope')]"

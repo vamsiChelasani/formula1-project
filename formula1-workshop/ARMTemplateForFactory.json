@@ -19,6 +19,10 @@
 			"type": "string",
 			"defaultValue": "@{linkedService().baseUrl}"
 		},
+		"tg_process_formula1_data_properties_pl_process_formula1_data_parameters_p_trigger_date": {
+			"type": "string",
+			"defaultValue": "@trigger().startTime"
+		},
 		"tg_process_formula1_data_properties_typeProperties_scope": {
 			"type": "string",
 			"defaultValue": "/subscriptions/f75834b8-9d1d-49cb-9939-984118aaa586/resourceGroups/formula1-project_rg/providers/Microsoft.Storage/storageAccounts/formula1datalakeacc"
@@ -51,8 +55,8 @@
 								"referenceName": "ds_storage_folder_validation",
 								"type": "DatasetReference",
 								"parameters": {
-									"p_window_end_date": {
-										"value": "@pipeline().parameters.p_window_end_date",
+									"p_trigger_date": {
+										"value": "@pipeline().parameters.p_trigger_date",
 										"type": "Expression"
 									}
 								}
@@ -104,7 +108,7 @@
 										"notebookPath": "/formula-one-db/clean_data/clean_circuits_data",
 										"baseParameters": {
 											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
+												"value": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')",
 												"type": "Expression"
 											}
 										}
@@ -129,10 +133,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/clean_data/clean_races_data",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -155,10 +156,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/clean_data/clean_constructors_data",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -181,10 +179,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/clean_data/clean_drivers_data",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -207,10 +202,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/clean_data/clean_lap_times_data",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -233,10 +225,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/clean_data/clean_pit_stops_data",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -259,10 +248,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/clean_data/clean_qualifying_data",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -285,10 +271,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/clean_data/clean_results_data",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -304,7 +287,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"p_window_end_date": {
+					"p_trigger_date": {
 						"type": "string"
 					}
 				},
@@ -488,7 +471,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"p_trigger_date": {
+									"value": "@pipeline().parameters.p_trigger_date",
+									"type": "Expression"
+								}
+							}
 						}
 					},
 					{
@@ -512,12 +500,23 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"p_trigger_date": {
+									"value": "@pipeline().parameters.p_trigger_date",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],
+				"concurrency": 1,
 				"policy": {
 					"elapsedTimeMetric": {}
+				},
+				"parameters": {
+					"p_trigger_date": {
+						"type": "string"
+					}
 				},
 				"annotations": []
 			},
@@ -549,8 +548,8 @@
 								"referenceName": "ds_storage_folder_validation",
 								"type": "DatasetReference",
 								"parameters": {
-									"p_window_end_date": {
-										"value": "@pipeline().parameters.p_window_end_date",
+									"p_trigger_date": {
+										"value": "@pipeline().parameters.p_trigger_date",
 										"type": "Expression"
 									}
 								}
@@ -608,10 +607,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/process_data/race_results_data",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -641,10 +637,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/analysis/drivers_standings",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -674,10 +667,7 @@
 									"typeProperties": {
 										"notebookPath": "/formula-one-db/analysis/team_standings",
 										"baseParameters": {
-											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
-												"type": "Expression"
-											}
+											"file_date_parameter": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')"
 										}
 									},
 									"linkedServiceName": {
@@ -701,7 +691,7 @@
 										"notebookPath": "/formula-one-db/process_data/calculated_results",
 										"baseParameters": {
 											"file_date_parameter": {
-												"value": "@formatDateTime(pipeline().parameters.p_window_end_date,'yyyy-MM-dd')",
+												"value": "@formatDateTime(pipeline().parameters.p_trigger_date,'yyyy-MM-dd')",
 												"type": "Expression"
 											}
 										}
@@ -719,7 +709,7 @@
 					"elapsedTimeMetric": {}
 				},
 				"parameters": {
-					"p_window_end_date": {
+					"p_trigger_date": {
 						"type": "string"
 					}
 				},
@@ -878,7 +868,7 @@
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
-					"p_window_end_date": {
+					"p_trigger_date": {
 						"type": "string"
 					}
 				},
@@ -888,7 +878,7 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"folderPath": {
-							"value": "@concat('raw/',formatDateTime(dataset().p_window_end_date,'yyyy-MM-dd'))",
+							"value": "@concat('raw/',formatDateTime(dataset().p_trigger_date,'yyyy-MM-dd'))",
 							"type": "Expression"
 						},
 						"fileSystem": "rawdata"
@@ -1014,7 +1004,9 @@
 							"referenceName": "pl_process_formula1_data",
 							"type": "PipelineReference"
 						},
-						"parameters": {}
+						"parameters": {
+							"p_trigger_date": "[parameters('tg_process_formula1_data_properties_pl_process_formula1_data_parameters_p_trigger_date')]"
+						}
 					}
 				],
 				"type": "BlobEventsTrigger",
@@ -1037,7 +1029,7 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"annotations": [],
-				"runtimeState": "Stopped",
+				"runtimeState": "Started",
 				"pipelines": [
 					{
 						"pipelineReference": {
